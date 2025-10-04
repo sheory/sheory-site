@@ -13,7 +13,7 @@ export default function HeroSection() {
             Oi, eu sou Sheory
           </h1>
           <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 leading-relaxed text-balance max-w-3xl mx-auto">
-            Engenheira de software apaixonada por tecnologia e por ajudar pessoas a entrarem na área de TI.
+            Engenheira de software com o propósito de ajudar pessoas a entender e conquistar seu espaço na tecnologia — de forma acessível e gratuita.
           </p>
           <div className="pt-4">
             <Link href="/artigos/descubra-sua-area-na-tecnologia">
