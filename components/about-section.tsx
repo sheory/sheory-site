@@ -110,7 +110,7 @@ export default function AboutSection() {
                   <div className="space-y-2">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <h5 className="text-lg font-semibold text-white">Senior Fullstack Developer</h5>
-                      <span className="text-sm text-gray-400">Jun 2024 - Presente</span>
+                      <span className="text-sm text-gray-400">Jun 2025 - Presente</span>
                     </div>
                     <p className="text-sm text-[var(--accent-lilac)] font-medium">
                       Multinacional de tecnologia e inovação • Remoto
@@ -129,7 +129,7 @@ export default function AboutSection() {
                   <div className="space-y-2">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <h5 className="text-lg font-semibold text-white">Senior Backend Developer | Tech Leader</h5>
-                      <span className="text-sm text-gray-400">Nov 2024 - Jun 2024</span>
+                      <span className="text-sm text-gray-400">Nov 2024 - Jun 2025</span>
                     </div>
                     <p className="text-sm text-[var(--accent-cyan)] font-medium">Empresa de Tecnologia • Remoto</p>
                     <ul className="text-sm text-gray-300 space-y-1 leading-relaxed list-disc list-inside">
