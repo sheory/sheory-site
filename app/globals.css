@@ -8,7 +8,15 @@
   --background-color: #0d0d0f;
   --text-color: #f5f5f5;
   --accent-lilac: #b388ff;
+  --accent-lilac-400: #9b6dfb;
   --accent-cyan: #00e0ff;
+  --accent-cyan-100: #a5f3fc; /* bem clara */
+  --accent-cyan-200: #67e8f9; /* clara */
+  --accent-cyan-400: #22d3ee; /* média */
+  --accent-cyan-600: #0891b2; /* escura */
+  --accent-cyan-700: #0e7490; /* mais escura */
+  --accent-cyan-800: #155e75; /* profunda */
+  --accent-cyan-900: #164e63; /* quase teal */
 
   /* Tailwind design tokens mapped to custom colors */
   --background: oklch(1 0 0);

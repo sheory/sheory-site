@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Sparkles, BookOpen } from "lucide-react"
+import { Sparkles, BookOpen, FileText } from "lucide-react"
 
 export default function HeroSection() {
   return (
@@ -15,7 +15,7 @@ export default function HeroSection() {
           <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 leading-relaxed text-balance max-w-3xl mx-auto">
             Engenheira de software com o propósito de ajudar pessoas a <span className="bg-gradient-to-r from-[#b388ff] to-[#00e0ff] bg-clip-text text-transparent">entender e conquistar seu espaço na tecnologia</span> — de forma acessível e gratuita.
           </p>
-          <div className="pt-4">
+          <div className="pt-4 flex flex-col sm:flex-row gap-4 items-center justify-center">
             <Link href="/artigos/descubra-sua-area-na-tecnologia">
               <Button
                 size="lg"
@@ -29,6 +29,20 @@ export default function HeroSection() {
                 <span className="gradient-text" style={{ WebkitTextFillColor: "#0d0d0f", color: "#0d0d0f" }}>
                   Descubra sua área na tecnologia
                 </span>
+              </Button>
+            </Link>
+            <Link href="/curriculo">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-base sm:text-lg px-8 py-6 font-semibold transition-all hover:scale-105 cursor-pointer border-2 bg-transparent"
+                style={{
+                  borderColor: "var(--accent-cyan)",
+                  color: "var(--accent-cyan)",
+                }}
+              >
+                <FileText className="mr-2 h-5 w-5" />
+                Crie seu currículo profissional
               </Button>
             </Link>
           </div>
@@ -61,6 +75,20 @@ export default function HeroSection() {
                 <h3 className="text-xl font-semibold">Artigos e Dicas</h3>
                 <p className="text-gray-400 leading-relaxed">
                   Conteúdos práticos para quem quer começar ou crescer na área de tecnologia
+                </p>
+              </div>
+            </Card>
+          </Link>
+
+           <Link href="/curriculo" className="group cursor-pointer">
+            <Card className="p-6 sm:p-8 h-full transition-all hover:scale-105 hover:border-[var(--accent-lilac)] bg-[#1a1a1f] border-white/10">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-4 rounded-full bg-[var(--accent-lilac)]/10">
+                  <FileText className="h-8 w-8" style={{ color: "var(--accent-lilac)" }} />
+                </div>
+                <h3 className="text-xl font-semibold gradient-text">Gerador de Currículo Profissional</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Crie um currículo no modelo Ivy League, com IA local via transformers.js e análise ATS em tempo real
                 </p>
               </div>
             </Card>
