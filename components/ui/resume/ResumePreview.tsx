@@ -32,8 +32,9 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
       <div className="lg:sticky lg:top-20 h-fit">
         <Card
           id="resume-preview"
-          className="p-12 bg-white text-black min-h-[1000px] relative"
+          className="bg-white text-black min-h-[1000px] relative"
           style={{
+            padding: "2rem 2.5rem",
             fontFamily: "'PT Sans', Arial, Helvetica, sans-serif",
             color: "rgb(51, 51, 51)",
           }}
@@ -47,13 +48,13 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
             }
           `}</style>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             {/* Header */}
             <div className="text-center">
-              <h1 className="text-[22px] font-bold text-center leading-[28px] text-black uppercase">
+              <h1 className="text-[20px] font-bold text-center leading-[28px] text-black uppercase">
                 {formData.fullName || "NOME SOBRENOME"}
               </h1>
-              <p className="text-[16px] text-[#6f6f6f] leading-[16px] mb-1">
+              <p className="text-[14px] text-[#6f6f6f] leading-[16px] mb-1" style={{ fontSize: "13px"}}>
                 {formData.desiredRole || "Back-end Developer | Python Developer"}
               </p>
               <div
