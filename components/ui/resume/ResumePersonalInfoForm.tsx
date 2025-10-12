@@ -39,7 +39,7 @@ export function ResumePersonalInfoForm({ formData, setFormData, atsData }: any) 
       <div className="space-y-4">
         {[
           { key: "fullName", label: "Nome Completo" },
-          { key: "desiredRole", label: "Cargo Desejado" },
+          { key: "desiredRole", label: "Cargo" },
           { key: "phone", label: "Telefone" },
           { key: "city", label: "Cidade" },
           { key: "email", label: "Email" },

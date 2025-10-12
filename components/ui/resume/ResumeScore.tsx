@@ -204,18 +204,52 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
               Como chegar a <span className="text-white font-semibold">100 pontos</span>:
             </p>
             <ul className="space-y-2 text-sm text-gray-300">
-              {ats.missing.map((item: string, index: number) => (
-                <motion.li
-                  key={index}
-                  className="flex items-start gap-2"
-                  initial={{ opacity: 0, x: -5 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Zap className="w-4 h-4 text-yellow-400 mt-[2px]" />
-                  <span>{item}</span>
-                </motion.li>
-              ))}
+              {ats.missing.map((item: string, index: number) => {
+                const hasActionWords = /ações diretas/i.test(item)
+
+                return (
+                  <motion.li
+                    key={index}
+                    className="flex items-start gap-2"
+                    initial={{ opacity: 0, x: -5 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <Zap className="w-4 h-4 text-yellow-400 mt-[2px]" />
+
+                    {hasActionWords ? (
+                      <TooltipProvider delayDuration={100}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span
+                              className="text-gray-200"
+                              dangerouslySetInnerHTML={{
+                                __html: item.replace(
+                                  /ações diretas/gi,
+                                  `<span class='font-semibold text-emerald-400 underline decoration-emerald-600/50 cursor-help'>ações diretas</span>`
+                                ),
+                              }}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="top"
+                            className="max-w-xs text-xs text-gray-100 bg-neutral-900 border border-white/10 p-2"
+                          >
+                            💡 Exemplos de ações diretas:
+                            <br />
+                            <span className="text-gray-300">
+                              “Desenvolvi uma API”, “Implementei autenticação segura”, 
+                              “Otimizei o desempenho do sistema”, “Liderei um time de 5 devs”.
+                            </span>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <span>{item}</span>
+                    )}
+                  </motion.li>
+                )
+              })}
             </ul>
           </motion.div>
         )}

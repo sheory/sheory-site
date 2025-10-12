@@ -31,6 +31,7 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
     <TooltipProvider delayDuration={0}>
       <div className="lg:sticky lg:top-20 h-fit">
         <Card
+          id="resume-preview"
           className="p-12 bg-white text-black min-h-[1000px] relative"
           style={{
             fontFamily: "'PT Sans', Arial, Helvetica, sans-serif",

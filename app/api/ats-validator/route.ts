@@ -124,7 +124,7 @@ function calculateATSScore(resume: any) {
   // --- COMO CHEGAR A 100 ---
   const missing: string[] = []
   if (!resume.desiredRole)
-    missing.push("Inclua um cargo desejado ou headline clara.")
+    missing.push("Inclua um Cargo ou headline clara.")
   if (unclearPhrases.length > 0)
     missing.push("Evite termos genéricos como 'responsável por' e prefira ações diretas.")
   if (!resume.github)
