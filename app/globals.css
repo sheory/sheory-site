@@ -4,21 +4,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Custom dark theme colors for Sheory's site */
-  --background-color: #0d0d0f;
-  --text-color: #f5f5f5;
-  --accent-lilac: #b388ff;
-  --accent-lilac-400: #9b6dfb;
-  --accent-cyan: #00e0ff;
-  --accent-cyan-100: #a5f3fc; /* bem clara */
-  --accent-cyan-200: #67e8f9; /* clara */
-  --accent-cyan-400: #22d3ee; /* média */
-  --accent-cyan-600: #0891b2; /* escura */
-  --accent-cyan-700: #0e7490; /* mais escura */
-  --accent-cyan-800: #155e75; /* profunda */
-  --accent-cyan-900: #164e63; /* quase teal */
-
-  /* Tailwind design tokens mapped to custom colors */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -55,7 +40,7 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(0.12 0.04 280);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -90,8 +75,41 @@
 }
 
 @theme inline {
-  --font-sans: "Inter", "Space Grotesk", system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Inter", "Inter Fallback", system-ui, -apple-system, sans-serif;
+  --font-display: "Satoshi", "Satoshi Fallback", system-ui, -apple-system, sans-serif;
+
+  /* Updated to exact EternaCloud color palette */
+  --color-background: 10 10 18; /* #0A0A12 - Deep navy/black */
+  --color-foreground: 248 248 250; /* #F8F8FA - Light text */
+
+  --color-card: 20 20 32;
+  --color-card-foreground: 248 248 250;
+
+  --color-popover: 20 20 32;
+  --color-popover-foreground: 248 248 250;
+
+  /* EternaCloud signature colors */
+  --color-primary: 59 130 246; /* #3B82F6 - Blue */
+  --color-primary-foreground: 255 255 255;
+
+  --color-secondary: 139 92 246; /* #8B5CF6 - Purple */
+  --color-secondary-foreground: 255 255 255;
+
+  --color-accent: 251 146 60; /* #FB923C - Orange */
+  --color-accent-foreground: 255 255 255;
+
+  --color-pink: 236 72 153; /* #EC4899 - Pink */
+
+  --color-muted: 30 30 45;
+  --color-muted-foreground: 156 163 175;
+
+  --color-destructive: 239 68 68;
+  --color-destructive-foreground: 255 255 255;
+
+  --color-border: 39 39 60;
+  --color-input: 39 39 60;
+  --color-ring: 59 130 246;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -128,95 +146,325 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius: 1.5rem;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-
   body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: "Inter", "Space Grotesk", system-ui, sans-serif;
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Updated gradient utilities to match EternaCloud's blue→purple→pink→orange gradient */
+@layer utilities {
+  .gradient-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 33%, #ec4899 66%, #fb923c 100%);
   }
 
-  a,
-  button {
-    color: var(--accent-cyan);
-    text-decoration: none;
-    transition: all 0.2s ease;
+  .gradient-secondary {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
   }
 
-  a:hover,
-  button:hover {
-    filter: brightness(1.2);
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: var(--accent-lilac);
-    font-weight: 600;
-  }
-
-  /* Adding gradient text effect for specific headings */
   .gradient-text {
-    background: linear-gradient(135deg, #b388ff 0%, #00e0ff 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 33%, #ec4899 66%, #fb923c 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  /* Profile image with transparent fading edges */
-  .profile-image-container {
+  .gradient-text-alt {
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 60px rgba(59, 130, 246, 0.4), 0 0 100px rgba(139, 92, 246, 0.3);
+  }
+
+  .glow-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glow-hover:hover {
+    box-shadow: 0 0 60px rgba(59, 130, 246, 0.5), 0 0 100px rgba(139, 92, 246, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .glass {
+    background: rgba(20, 20, 32, 0.6);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  .glass-light {
+    background: rgb(123 102 159 / 30%);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+  }
+
+  .text-3d {
+    text-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.6), 0 0 90px rgba(236, 72, 153, 0.4),
+      3px 3px 6px rgba(0, 0, 0, 0.9);
+  }
+
+  /* Added 3D folded surface effect like EternaCloud */
+  .folded-surface {
     position: relative;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    overflow: hidden;
+    background: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 20%, #7c2d8e 40%, #be185d 60%, #ea580c 80%, #fb923c 100%);
+    transform-style: preserve-3d;
+    perspective: 1000px;
   }
 
-  .profile-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.8) 60%, rgba(0, 0, 0, 0) 100%);
-    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.8) 60%, rgba(0, 0, 0, 0) 100%);
+  .folded-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.3) 5%,
+      transparent 10%,
+      rgba(255, 255, 255, 0.05) 15%,
+      transparent 20%
+    );
+    pointer-events: none;
   }
+}
 
-  /* Instagram grid layout matching Instagram's design */
-  .instagram-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Added cinematic scroll animations and transitions */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-
-  .instagram-post {
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .instagram-post:hover {
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.5), 0 0 80px rgba(139, 92, 246, 0.4);
+  }
+}
+
+@keyframes icon-pulse {
+  0%,
+  100% {
+    transform: scale(1);
     opacity: 0.8;
   }
-
-  @media (max-width: 640px) {
-    .profile-image-container {
-      width: 240px;
-      height: 240px;
-    }
-
-    .instagram-grid {
-      gap: 2px;
-    }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
   }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-icon-pulse {
+  animation: icon-pulse 4s ease-in-out infinite;
+}
+
+/* Staggered animation delays */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-600 {
+  animation-delay: 600ms;
+}
+
+/* Initial hidden state for animations */
+.animate-on-scroll {
+  opacity: 0;
+}
+
+/* Parallax effect */
+.parallax {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Added new animations for premium feel */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 10s ease infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+@keyframes gradientFloat {
+  0% {
+    background-position: 50% 100%;
+  }
+  50% {
+    background-position: 50% 90%;
+  }
+  100% {
+    background-position: 50% 100%;
+  }
+}
+
+.animate-gradient-float {
+  animation: gradientFloat 12s ease-in-out infinite;
+  background-size: 150% 150%;
+}
+
+
+@keyframes backgroundShift {
+  0% { background-position: 50% 100%; }
+  50% { background-position: 55% 90%; }
+  100% { background-position: 50% 100%; }
+}
+
+.animate-background-shift {
+  animation: backgroundShift 18s ease-in-out infinite;
+  background-size: 140% 140%;
 }

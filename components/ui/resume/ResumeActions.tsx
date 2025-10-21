@@ -1,81 +1,86 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Save, Download, Share2 } from "lucide-react"
-import * as htmlToImage from "html-to-image"
-import jsPDF from "jspdf"
+import { Card } from "@/components/ui/card"
+import { Download, RefreshCcw, FileText, Wand2 } from "lucide-react"
+import { motion } from "framer-motion"
 
-export function ResumeActions() {
-  const handleDownloadPDF = async () => {
-    const preview = document.getElementById("resume-preview")
-    if (!preview) return
+interface ResumeActionsProps {
+  onGeneratePDF?: () => void
+  onClear?: () => void
+  onAIEnhance?: () => void
+  disabled?: boolean
+}
 
-    try {
-      // Remove visual dos highlights temporariamente
-      const highlights = preview.querySelectorAll(".highlight")
-      highlights.forEach((el) => {
-        (el as HTMLElement).style.background = "transparent"
-        ;(el as HTMLElement).style.border = "none"
-      })
-
-      // Gera imagem a partir do DOM (com html-to-image)
-      const dataUrl = await htmlToImage.toPng(preview, {
-        cacheBust: true,
-        backgroundColor: "#ffffff",
-        pixelRatio: 2,
-      })
-
-      // Cria PDF com a imagem
-      const pdf = new jsPDF("p", "pt", "a4")
-      const img = new Image()
-      img.src = dataUrl
-
-      await new Promise((resolve) => (img.onload = resolve))
-
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = (img.height * pdfWidth) / img.width
-      pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight)
-      pdf.save("curriculo.pdf")
-    } catch (error) {
-      console.error("Erro ao gerar PDF:", error)
-    } finally {
-      // Restaura os highlights
-      const highlights = preview.querySelectorAll(".highlight")
-      highlights.forEach((el) => {
-        (el as HTMLElement).style.background = ""
-        ;(el as HTMLElement).style.border = ""
-      })
-    }
-  }
-
+export function ResumeActions({
+  onGeneratePDF,
+  onClear,
+  onAIEnhance,
+  disabled,
+}: ResumeActionsProps) {
   return (
-    <div className="flex flex-wrap gap-4 justify-center">
-      <Button
-        className="cursor-pointer"
-        style={{ backgroundColor: "var(--accent-cyan)", color: "#0d0d0f" }}
-      >
-        <Save className="mr-2 h-4 w-4" />
-        Salvar Versão
-      </Button>
+    <Card className="relative p-8 bg-gradient-to-br from-[#0a0a0f]/90 to-[#111115]/90 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/5 via-transparent to-cyan-500/5 pointer-events-none" />
 
-      <Button
-        variant="outline"
-        className="cursor-pointer bg-transparent"
-        style={{ borderColor: "var(--accent-lilac)", color: "var(--accent-lilac)" }}
-        onClick={handleDownloadPDF}
-      >
-        <Download className="mr-2 h-4 w-4" />
-        Baixar PDF
-      </Button>
+      <div className="relative">
+        <h3 className="text-lg font-semibold text-white mb-6">Ações</h3>
 
-      <Button
-        variant="outline"
-        className="cursor-pointer bg-transparent"
-        style={{ borderColor: "var(--accent-cyan)", color: "var(--accent-cyan)" }}
-      >
-        <Share2 className="mr-2 h-4 w-4" />
-        Gerar Link Público
-      </Button>
-    </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Gerar PDF */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex flex-col"
+          >
+            <Button
+              onClick={onGeneratePDF}
+              disabled={disabled}
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 hover:from-cyan-500/30 hover:to-blue-500/30 text-cyan-300 transition-all"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Gerar PDF</span>
+            </Button>
+          </motion.div>
+
+          {/* Aprimorar com IA */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex flex-col"
+          >
+            <Button
+              onClick={onAIEnhance}
+              disabled={disabled}
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/40 hover:from-purple-500/30 hover:to-pink-500/30 text-purple-300 transition-all"
+            >
+              <Wand2 className="w-4 h-4" />
+              <span>Aprimorar com IA</span>
+            </Button>
+          </motion.div>
+
+          {/* Limpar Dados */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex flex-col"
+          >
+            <Button
+              onClick={onClear}
+              disabled={disabled}
+              variant="outline"
+              className="flex items-center justify-center gap-2 border border-red-500/40 text-red-300 hover:bg-red-500/10 transition-all"
+            >
+              <RefreshCcw className="w-4 h-4" />
+              <span>Limpar Dados</span>
+            </Button>
+          </motion.div>
+        </div>
+
+        <p className="text-xs text-gray-400 text-center mt-6">
+          💡 Dica: use a opção <span className="text-purple-300 font-medium">“Aprimorar com IA”</span> para deixar seu
+          currículo mais competitivo.
+        </p>
+      </div>
+    </Card>
   )
 }
