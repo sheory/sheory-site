@@ -101,18 +101,28 @@ export default function ResumeBuilderPage() {
 
   // Gerar PDF
   const handleGeneratePDF = async () => {
-    const el = document.getElementById("resume-preview")
-    if (!el) return
-    const html2pdf = (await import("html2pdf.js")).default
-    html2pdf()
-      .from(el)
-      .set({
-        margin: 0.5,
-        filename: `${formData.fullName || "curriculo"}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { orientation: "portrait" },
-      })
-      .save()
+    const element = document.getElementById("resume-preview")
+    if (!element) return
+
+    // Dynamically import html2canvas-pro + jsPDF
+    const html2canvas = (await import("html2canvas-pro")).default
+    const jsPDF = (await import("jspdf")).default
+
+    // Render to canvas
+    const canvas = await html2canvas(element, {
+      scale: 2, // higher quality
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      logging: false,
+    })
+
+    const imgData = canvas.toDataURL("image/png")
+    const pdf = new jsPDF("p", "mm", "a4")
+    const pdfWidth = pdf.internal.pageSize.getWidth()
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight)
+    pdf.save(`${formData.fullName || "curriculo"}.pdf`)
   }
 
   // Placeholder IA

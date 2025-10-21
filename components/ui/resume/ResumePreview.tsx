@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import type { ResumeFormData } from "@/app/curriculo/page"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { motion } from "framer-motion"
 
 interface ResumePreviewProps {
@@ -17,12 +17,12 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
     atsData.highlights.forEach(({ text: keyword, suggestion, severity }: any) => {
       const color =
         severity === "error"
-          ? "bg-red-200/60 border-red-400"
-          : "bg-yellow-200/50 border-yellow-400"
+          ? "background-color: rgba(239, 68, 68, 0.3); border-color: #ef4444;"
+          : "background-color: rgba(250, 204, 21, 0.25); border-color: #facc15;"
       const regex = new RegExp(`(${keyword})`, "gi")
       highlighted = highlighted.replace(
         regex,
-        `<span class="highlight ${color}" data-tooltip="${suggestion}">$1</span>`
+        `<span class="highlight" style="${color}" title="${suggestion}">$1</span>`
       )
     })
     return highlighted
@@ -37,40 +37,65 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
       >
         <Card
           id="resume-preview"
-          className="relative bg-white text-black min-h-[1000px] shadow-lg rounded-2xl border border-gray-200 overflow-hidden"
+          className="relative min-h-[1000px] rounded-2xl overflow-hidden"
           style={{
+            backgroundColor: "#ffffff",
+            color: "#333333",
+            border: "1px solid #dddddd",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             padding: "2.2rem 2.8rem",
             fontFamily: "'Inter', 'PT Sans', Arial, Helvetica, sans-serif",
-            color: "#333",
           }}
         >
-          {/* CSS inline para highlights */}
           <style jsx global>{`
             .highlight {
               border-radius: 3px;
               border: 1px solid transparent;
               padding: 0 2px;
               cursor: help;
-              transition: background 0.2s ease;
+              transition: filter 0.2s ease;
             }
             .highlight:hover {
-              filter: brightness(0.9);
+              filter: brightness(0.95);
             }
           `}</style>
 
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {/* === HEADER === */}
-            <div className="text-center">
-              <h1 className="text-[22px] font-extrabold text-black uppercase tracking-wide">
+            <div style={{ textAlign: "center" }}>
+              <h1
+                style={{
+                  fontSize: "22px",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  color: "#000000",
+                  letterSpacing: "0.5px",
+                }}
+              >
                 {formData.fullName || "NOME SOBRENOME"}
               </h1>
-              <p className="text-[13px] text-[#4a4a4a] mt-1 font-medium">
+              <p
+                style={{
+                  fontSize: "13px",
+                  color: "#4a4a4a",
+                  fontWeight: 500,
+                  marginTop: "4px",
+                }}
+              >
                 {formData.desiredRole || "Back-end Developer | Python Developer"}
               </p>
 
               <div
-                className="flex justify-center items-center gap-2 text-xs flex-wrap mt-1 text-[#3e3e3e]"
-                style={{ fontSize: "11.5px", lineHeight: "16px" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  gap: "6px",
+                  fontSize: "11.5px",
+                  color: "#3e3e3e",
+                  lineHeight: "16px",
+                  marginTop: "6px",
+                }}
               >
                 {formData.phone && <span>{formData.phone}</span>}
                 {formData.phone && formData.email && <span>•</span>}
@@ -86,14 +111,34 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
 
             {/* === SKILLS === */}
             {formData.skills.length > 0 && (
-              <div className="pt-3">
-                <div className="border-b border-black/80 pb-1 mb-2">
-                  <h2 className="text-center font-semibold uppercase text-[12.5px] tracking-wide">
+              <div style={{ paddingTop: "10px" }}>
+                <div
+                  style={{
+                    borderBottom: "1px solid #000000",
+                    paddingBottom: "4px",
+                    marginBottom: "6px",
+                  }}
+                >
+                  <h2
+                    style={{
+                      textAlign: "center",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      fontSize: "12.5px",
+                      letterSpacing: "0.4px",
+                      color: "#000000",
+                    }}
+                  >
                     Skills
                   </h2>
                 </div>
                 <p
-                  className="text-center text-[11px] leading-relaxed"
+                  style={{
+                    textAlign: "center",
+                    fontSize: "11px",
+                    lineHeight: "16px",
+                    color: "#333333",
+                  }}
                   dangerouslySetInnerHTML={{
                     __html: highlightText(formData.skills.join(" · ")),
                   }}
@@ -103,45 +148,85 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
 
             {/* === EXPERIENCE === */}
             {formData.experiences.length > 0 && (
-              <div className="pt-4">
-                <div className="border-b border-black/80 pb-1 mb-2">
-                  <h2 className="text-center font-semibold uppercase text-[12.5px] tracking-wide">
+              <div style={{ paddingTop: "12px" }}>
+                <div
+                  style={{
+                    borderBottom: "1px solid #000000",
+                    paddingBottom: "4px",
+                    marginBottom: "6px",
+                  }}
+                >
+                  <h2
+                    style={{
+                      textAlign: "center",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      fontSize: "12.5px",
+                      color: "#000000",
+                    }}
+                  >
                     Experience
                   </h2>
                 </div>
 
-                <div className="space-y-3">
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   {formData.experiences.map((exp) => (
                     <div key={exp.id}>
-                      <div className="flex justify-between items-start">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                        }}
+                      >
                         <p
-                          className="font-semibold text-[12px]"
+                          style={{
+                            fontWeight: 600,
+                            fontSize: "12px",
+                            color: "#111111",
+                          }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(exp.company || "Company Name"),
                           }}
                         />
-                        <p className="text-[10.5px] text-gray-700">{exp.location}</p>
+                        <p style={{ fontSize: "10.5px", color: "#555555" }}>
+                          {exp.location}
+                        </p>
                       </div>
 
-                      <div className="flex justify-between mb-1">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginBottom: "4px",
+                        }}
+                      >
                         <p
-                          className="text-[11px]"
+                          style={{
+                            fontSize: "11px",
+                            color: "#333333",
+                          }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(exp.role || "Job Title"),
                           }}
                         />
-                        <p className="text-[10.5px] text-gray-700">
+                        <p style={{ fontSize: "10.5px", color: "#555555" }}>
                           {exp.startDate && exp.endDate
                             ? `${exp.startDate} - ${exp.endDate}`
                             : "MM/YYYY - MM/YYYY"}
                         </p>
                       </div>
 
-                      <ul className="list-disc ml-4 space-y-[2px]">
+                      <ul style={{ marginLeft: "16px", listStyleType: "disc" }}>
                         {exp.responsibilities.map((r, i) => (
                           <li
                             key={i}
-                            className="text-[10.5px] leading-[1.25] text-gray-800 tracking-tight"
+                            style={{
+                              fontSize: "10.5px",
+                              color: "#222222",
+                              lineHeight: "1.25",
+                              marginBottom: "2px",
+                            }}
                             dangerouslySetInnerHTML={{
                               __html: highlightText(r),
                             }}
@@ -156,34 +241,68 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
 
             {/* === EDUCATION === */}
             {formData.education.length > 0 && (
-              <div className="pt-4">
-                <div className="border-b border-black/80 pb-1 mb-2">
-                  <h2 className="text-center font-semibold uppercase text-[12.5px] tracking-wide">
+              <div style={{ paddingTop: "12px" }}>
+                <div
+                  style={{
+                    borderBottom: "1px solid #000000",
+                    paddingBottom: "4px",
+                    marginBottom: "6px",
+                  }}
+                >
+                  <h2
+                    style={{
+                      textAlign: "center",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      fontSize: "12.5px",
+                      color: "#000000",
+                    }}
+                  >
                     Education
                   </h2>
                 </div>
 
-                <div className="space-y-3">
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   {formData.education.map((edu) => (
                     <div key={edu.id}>
-                      <div className="flex justify-between items-start">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                        }}
+                      >
                         <p
-                          className="font-semibold text-[12px]"
+                          style={{
+                            fontWeight: 600,
+                            fontSize: "12px",
+                            color: "#111111",
+                          }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(edu.institution || "Institution Name"),
                           }}
                         />
-                        <p className="text-[10.5px] text-gray-700">{edu.location}</p>
+                        <p style={{ fontSize: "10.5px", color: "#555555" }}>
+                          {edu.location}
+                        </p>
                       </div>
 
-                      <div className="flex justify-between">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <p
-                          className="text-[11px]"
+                          style={{
+                            fontSize: "11px",
+                            color: "#333333",
+                          }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(edu.degree || "Degree Name"),
                           }}
                         />
-                        <p className="text-[10.5px] text-gray-700">
+                        <p style={{ fontSize: "10.5px", color: "#555555" }}>
                           {edu.period || "YYYY - YYYY"}
                         </p>
                       </div>

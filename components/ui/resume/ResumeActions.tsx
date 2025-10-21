@@ -35,7 +35,14 @@ export function ResumeActions({
             <Button
               onClick={onGeneratePDF}
               disabled={disabled}
-              className="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 hover:from-cyan-500/30 hover:to-blue-500/30 text-cyan-300 transition-all"
+              className="flex items-center justify-center gap-2 
+                bg-transparent 
+                border border-cyan-500/50 
+                text-cyan-300 
+                hover:bg-cyan-500/10 
+                hover:border-cyan-400 
+                hover:text-cyan-200 
+                transition-all"
             >
               <FileText className="w-4 h-4" />
               <span>Gerar PDF</span>
@@ -51,7 +58,14 @@ export function ResumeActions({
             <Button
               onClick={onAIEnhance}
               disabled={disabled}
-              className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/40 hover:from-purple-500/30 hover:to-pink-500/30 text-purple-300 transition-all"
+              className="flex items-center justify-center gap-2 
+                bg-transparent 
+                border border-purple-500/50 
+                text-purple-300 
+                hover:bg-purple-500/10 
+                hover:border-purple-400 
+                hover:text-purple-200 
+                transition-all"
             >
               <Wand2 className="w-4 h-4" />
               <span>Aprimorar com IA</span>
