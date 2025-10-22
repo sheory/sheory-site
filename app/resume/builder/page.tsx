@@ -8,8 +8,7 @@ import { ResumeExperienceForm } from "@/components/ui/resume/ResumeExperienceFor
 import { ResumeEducationForm } from "@/components/ui/resume/ResumeEducationForm"
 import { ResumeActions } from "@/components/ui/resume/ResumeActions"
 import { ResumePreview } from "@/components/ui/resume/ResumePreview"
-import { Card } from "@/components/ui/card"
-import Link from "next/link"
+import { Navbar } from "@/components/navbar"
 
 export interface Experience {
   id: string
@@ -132,24 +131,8 @@ export default function ResumeBuilderPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top_left,_#0a0a12_0%,_#1b1528_60%)]">
-      {/* === Header fixo === */}
-      <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl">
-        <div className="glass-light rounded-full px-6 py-3 flex items-center justify-between border border-white/10 backdrop-blur-md">
-          <div className="flex items-center space-x-4">
-            <div className="text-white font-bold">Sheory.dev</div>
-            <div className="text-sm text-white/60">/resume/builder</div>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Link href="/resume" className="text-sm text-white/80 hover:text-white">
-              Voltar
-            </Link>
-            <button className="text-sm text-white/80 hover:text-white">Ajuda</button>
-            <button className="p-2 rounded-full bg-white/10">🌙</button>
-          </div>
-        </div>
-      </header>
+      <Navbar collapseOnHover/>
 
-      {/* === Conteúdo principal === */}
       <div className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-28">
         {/* Score ATS */}
         <div className="mb-12">

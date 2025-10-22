@@ -5,18 +5,120 @@ import { Card } from "@/components/ui/card"
 import { motion } from "framer-motion"
 import { AlertTriangle, Info, CheckCircle2, Zap, TrendingUp } from "lucide-react"
 import clsx from "clsx"
+import ReactECharts from "echarts-for-react"
+
+/* =======================
+   Paleta igual ao Grade Gauge (ECharts)
+   ======================= */
+const GAUGE = {
+  red:   "#FF6E76",
+  amber: "#FDDD60",
+  cyan:  "#58D9F9",
+  green: "#7CFFB2",
+}
+
+const ATS_GRADIENT = `linear-gradient(90deg,
+  ${GAUGE.red} 0%,
+  ${GAUGE.amber} 33.33%,
+  ${GAUGE.cyan} 66.66%,
+  ${GAUGE.green} 100%
+)`
+
+const TRACK_COLOR = "rgba(12,12,16,0.90)" // trilho escuro para cobrir a parte não preenchida
 
 interface ResumeScoreProps {
   resumeData: any
   onAtsUpdate?: (data: any) => void
 }
 
+/* =======================
+   Gauge estilo oficial "Grade" (doc ECharts)
+   - sem labels "Grade A/B/C/D"
+   - menos riscos (apenas pequenos)
+   ======================= */
+function AtsGradeGaugeDocStyle({ score }: { score: number }) {
+  const v = Math.max(0, Math.min(100, score)) / 100 // doc usa 0..1
+
+  const option = {
+    series: [
+      {
+        type: "gauge",
+        startAngle: 180,
+        endAngle: 0,
+        center: ["50%", "70%"],
+        radius: "108%",
+        min: 0,
+        max: 1,
+        // menos divisões gerais => menos riscos totais
+        splitNumber: 6,
+        axisLine: {
+          lineStyle: {
+            width: 6,
+            color: [
+              [0.25, GAUGE.red],
+              [0.5,  GAUGE.amber],
+              [0.75, GAUGE.cyan],
+              [1.0,  GAUGE.green],
+            ],
+          },
+        },
+        pointer: {
+          icon: "path://M12.8,0.7l12,40.1H0.7L12.8,0.7z",
+          length: "12%",
+          width: 20,
+          offsetCenter: [0, "-60%"],
+          itemStyle: { color: "auto" },
+        },
+        // apenas riscos pequenos
+        axisTick: {
+          length: 6,
+          splitNumber: 2,
+          lineStyle: { color: "auto", width: 2 },
+        },
+        // sem riscos grandes
+        splitLine: { show: false },
+        // remove Grade A/B/C/D
+        axisLabel: { show: false },
+        title: {
+          offsetCenter: [0, "-12%"],
+          fontSize: 14,
+          color: "#8b8f9b",
+          text: "ATS SCORE",
+        },
+        detail: {
+          fontSize: 36,
+          offsetCenter: [0, "-30%"],
+          valueAnimation: true,
+          formatter(val: number) {
+            return Math.round(val * 100) + ""
+          },
+          color: "inherit",
+        },
+        data: [{ value: v, name: "ATS SCORE" }],
+      },
+    ],
+    backgroundColor: "transparent",
+  }
+
+  return (
+    <ReactECharts
+      option={option}
+      style={{ width: 620, height: 360 }} // meia-lua grande para equiparar às barras
+      notMerge
+      lazyUpdate
+    />
+  )
+}
+
+/* =======================
+   Componente principal
+   ======================= */
 export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
   const [ats, setAts] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [hasData, setHasData] = useState(false)
 
-  // === Verifica se o usuário preencheu dados do currículo
+  // Verifica se há dados preenchidos
   useEffect(() => {
     const filled =
       resumeData?.fullName ||
@@ -27,7 +129,7 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
     setHasData(!!filled)
   }, [resumeData])
 
-  // === Chamada para a API do ATS Validator
+  // Chama a API de ATS
   useEffect(() => {
     if (!hasData) return
     const timeout = setTimeout(async () => {
@@ -45,19 +147,6 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
     return () => clearTimeout(timeout)
   }, [resumeData, hasData, onAtsUpdate])
 
-  // === Utilitários de cor e gradiente
-  const getColor = (value: number) => {
-    if (value < 50) return "#ef4444"
-    if (value < 75) return "#f59e0b"
-    return "#10b981"
-  }
-
-  const getGradient = (value: number) => {
-    if (value < 50) return "linear-gradient(135deg, #ef4444, #f87171)"
-    if (value < 75) return "linear-gradient(135deg, #f59e0b, #fbbf24)"
-    return "linear-gradient(135deg, #10b981, #34d399)"
-  }
-
   const getSeverityIcon = (msg: string) => {
     if (/inclua|adicione|falta|ausente/i.test(msg))
       return <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
@@ -66,10 +155,10 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
     return <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
   }
 
-  // === Tela inicial (sem dados)
+  // Tela inicial (sem dados)
   if (!hasData)
     return (
-      <Card className="p-12 bg-gradient-to-br from-[#0a0a0f] to-[#111115] border-white/5 text-center w-full max-w-6xl mx-auto mb-12 relative overflow-hidden">
+      <Card className="p-12 bg-gradient-to-br from-[#0a0a0f] to-[#111115] border-white/5 text-center w-full max-w-none mx-auto mb-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5" />
         <div className="relative">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
@@ -80,43 +169,37 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
           </div>
           <h2 className="text-7xl font-bold text-gray-600 mb-4">0/100</h2>
           <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
-            Preencha o formulário para calcular seu score ATS e receber
-            recomendações personalizadas.
+            Preencha o formulário para calcular seu score ATS e receber recomendações personalizadas.
           </p>
         </div>
       </Card>
     )
 
-  // === Tela de loading
+  // Loading
   if (loading || !ats)
     return (
-      <Card className="p-12 bg-gradient-to-br from-[#0a0a0f] to-[#111115] border-white/5 text-center w-full max-w-6xl mx-auto mb-12 relative overflow-hidden">
+      <Card className="p-12 bg-gradient-to-br from-[#0a0a0f] to-[#111115] border-white/5 text-center w-full max-w-none mx-auto mb-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-purple-500/10 animate-pulse" />
         <div className="relative">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border-4 border-purple-500/20 border-t-purple-500 animate-spin" />
-          <p className="text-gray-400 text-sm font-medium">
-            Calculando pontuação ATS...
-          </p>
+          <p className="text-gray-400 text-sm font-medium">Calculando pontuação ATS...</p>
         </div>
       </Card>
     )
 
-  // === Dados processados
+  // Dados processados
   const barData = Object.entries(ats.sections || {}).map(([key, value]) => ({
     categoria: key,
-    valor: value,
+    valor: value as number,
   }))
   const score = ats.score ?? 0
-  const radius = 90
-  const circumference = Math.PI * radius
-  const offset = circumference - (score / 100) * circumference
 
   return (
-    <Card className="w-full max-w-6xl mx-auto bg-gradient-to-br from-[#0a0a0f]/95 to-[#111115]/95 border border-white/10 backdrop-blur-2xl rounded-3xl overflow-hidden mb-12 relative">
+    <Card className="w-full max-w-none mx-auto bg-gradient-to-br from-[#0a0a0f]/95 to-[#111115]/95 border border-white/10 backdrop-blur-2xl rounded-3xl overflow-hidden mb-12 relative">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 pointer-events-none" />
 
       <div className="relative p-10">
-        {/* === Header === */}
+        {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 mb-3">
@@ -125,82 +208,19 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
                 Análise ATS
               </span>
             </div>
-            <h3 className="text-2xl font-bold text-white">
-              Pontuação do Currículo
-            </h3>
-            <p className="text-sm text-gray-400 mt-1">
-              Otimize seu currículo para sistemas de rastreamento
-            </p>
+            <h3 className="text-2xl font-bold text-white">Pontuação do Currículo</h3>
+            <p className="text-sm text-gray-400 mt-1">Otimize seu currículo para sistemas de rastreamento</p>
           </div>
         </div>
 
-        {/* === Gauge + Barras === */}
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 mb-10">
-          {/* Gauge semicircular */}
-          <div className="relative w-[280px] h-[200px] flex items-center justify-center shrink-0">
-            <div
-              className="absolute inset-0 blur-3xl opacity-30 rounded-full"
-              style={{ background: getGradient(score) }}
-            />
-
-            <svg viewBox="0 0 200 110" className="relative w-full h-full">
-              <path
-                d="M10 100 A90 90 0 0 1 190 100"
-                stroke="#1a1a1f"
-                strokeWidth="18"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <defs>
-                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#ef4444" />
-                  <stop offset="50%" stopColor="#f59e0b" />
-                  <stop offset="100%" stopColor="#10b981" />
-                </linearGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <path
-                d="M10 100 A90 90 0 0 1 190 100"
-                stroke="url(#gaugeGradient)"
-                strokeWidth="18"
-                fill="none"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                strokeLinecap="round"
-                filter="url(#glow)"
-                style={{
-                  transition:
-                    "stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
-                }}
-              />
-            </svg>
-
-            <div className="absolute bottom-6 flex flex-col items-center">
-              <p className="text-xs uppercase tracking-widest text-gray-500 mb-2 font-semibold">
-                ATS SCORE
-              </p>
-              <h2
-                className="text-6xl font-black leading-none mb-1"
-                style={{
-                  background: getGradient(score),
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                {score}
-              </h2>
-              <p className="text-2xl font-bold text-gray-600">/100</p>
-            </div>
+        {/* Gauge + Barras */}
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-10">
+          {/* Gauge (doc style) */}
+          <div className="w-full flex justify-center">
+            <AtsGradeGaugeDocStyle score={score} />
           </div>
 
-          {/* Barras laterais */}
+          {/* Barras laterais (gradiente igual ao gauge) */}
           <div className="flex-1 w-full space-y-5">
             {barData.map((item, index) => (
               <motion.div
@@ -208,31 +228,28 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
                 className="space-y-2"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
+                transition={{ delay: index * 0.08, duration: 0.5 }}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-gray-300 capitalize">
-                    {item.categoria}
-                  </span>
-                  <span className="text-sm font-bold text-white tabular-nums">
-                    {item.valor}
-                  </span>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[13px] text-gray-300 font-medium">{item.categoria}</span>
+                  <span className="text-[13px] text-gray-200 font-semibold tabular-nums">{item.valor}</span>
                 </div>
-                <div className="relative h-3 bg-white/5 rounded-full overflow-hidden border border-white/10">
+
+                <div className="relative h-3 rounded-full overflow-hidden">
+                  {/* gradiente sempre por baixo */}
+                  <div className="absolute inset-0" style={{ background: ATS_GRADIENT }} />
+                  {/* borda sutil (inset) */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }}
+                  />
+                  {/* cobertura da parte NÃO preenchida */}
                   <motion.div
-                    className="absolute inset-0 rounded-full"
-                    style={{
-                      width: `${item.valor}%`,
-                      background: getGradient(item.valor),
-                      boxShadow: `0 0 20px ${getColor(item.valor)}40`,
-                    }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${item.valor}%` }}
-                    transition={{
-                      duration: 1,
-                      delay: index * 0.1,
-                      ease: "easeOut",
-                    }}
+                    className="absolute top-0 right-0 h-full"
+                    style={{ background: TRACK_COLOR }}
+                    initial={{ width: "100%" }}
+                    animate={{ width: `${100 - item.valor}%` }}
+                    transition={{ duration: 0.9, ease: "easeOut" }}
                   />
                 </div>
               </motion.div>
@@ -243,9 +260,7 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
         {/* Recomendações */}
         {ats.insights?.length > 0 && (
           <div className="space-y-4 mb-8">
-            <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-              Recomendações
-            </h4>
+            <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Recomendações</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {ats.insights.map((msg: string, i: number) => (
                 <motion.div
@@ -263,9 +278,7 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
                   transition={{ delay: i * 0.05, duration: 0.3 }}
                 >
                   {getSeverityIcon(msg)}
-                  <p className="text-sm text-gray-200 leading-relaxed flex-1">
-                    {msg}
-                  </p>
+                  <p className="text-sm text-gray-200 leading-relaxed flex-1">{msg}</p>
                 </motion.div>
               ))}
             </div>
@@ -285,12 +298,8 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
                 <Zap className="w-5 h-5 text-yellow-400" />
               </div>
               <div>
-                <h4 className="text-base font-bold text-white">
-                  Como alcançar 100 pontos
-                </h4>
-                <p className="text-xs text-gray-400">
-                  Siga estas recomendações para maximizar seu score
-                </p>
+                <h4 className="text-base font-bold text-white">Como alcançar 100 pontos</h4>
+                <p className="text-xs text-gray-400">Siga estas recomendações para maximizar seu score</p>
               </div>
             </div>
             <ul className="space-y-3">
@@ -303,9 +312,7 @@ export function ResumeScore({ resumeData, onAtsUpdate }: ResumeScoreProps) {
                   transition={{ delay: index * 0.05, duration: 0.3 }}
                 >
                   <Zap className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
-                  <span className="text-sm text-gray-300 leading-relaxed">
-                    {item}
-                  </span>
+                  <span className="text-sm text-gray-300 leading-relaxed">{item}</span>
                 </motion.li>
               ))}
             </ul>

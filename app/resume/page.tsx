@@ -30,7 +30,7 @@ const features = [
 export default function ResumeToolkitPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0d021f] via-[#100726] to-[#0a0a14] text-gray-200 flex flex-col">
-      <Navbar /> {/* navbar global */}
+      <Navbar collapseOnHover/>
 
       <main className="flex flex-col items-center justify-center flex-1 px-6 py-24">
         <motion.div
