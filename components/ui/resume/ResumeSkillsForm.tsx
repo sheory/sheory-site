@@ -1,8 +1,7 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, MinusCircle } from "lucide-react"
 import type { ResumeFormData } from "@/app/resume/builder/page"
 import { useState } from "react"
 
@@ -46,7 +45,7 @@ export function ResumeSkillsForm({ formData, setFormData }: Props) {
               onClick={() => removeSkill(skill)}
               className="text-[var(--accent-lilac)] hover:text-[#9b6dfb]"
             >
-              <Trash2 className="h-4 w-4" />
+              <MinusCircle className="h-4 w-4" />
             </button>
           </div>
         ))}
