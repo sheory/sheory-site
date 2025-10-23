@@ -8,6 +8,7 @@ import { ResumeExperienceForm } from "@/components/ui/resume/ResumeExperienceFor
 import { ResumeEducationForm } from "@/components/ui/resume/ResumeEducationForm"
 import { ResumeActions } from "@/components/ui/resume/ResumeActions"
 import { ResumePreview } from "@/components/ui/resume/ResumePreview"
+import { LinkedInImport } from "@/components/ui/resume/LinkedInImport"
 import { Navbar } from "@/components/navbar"
 
 export interface Experience {
@@ -143,6 +144,7 @@ export default function ResumeBuilderPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Coluna esquerda - Forms */}
           <div className="space-y-8">
+            <LinkedInImport />
             <ResumePersonalInfoForm
               formData={formData}
               setFormData={setFormData}

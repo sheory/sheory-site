@@ -61,11 +61,10 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
           `}</style>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            {/* === HEADER === */}
             <div style={{ textAlign: "center" }}>
               <h1
                 style={{
-                  fontSize: "22px",
+                  fontSize: "18px",
                   fontWeight: 800,
                   textTransform: "uppercase",
                   color: "#000000",
@@ -79,7 +78,7 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                   fontSize: "13px",
                   color: "#4a4a4a",
                   fontWeight: 500,
-                  marginTop: "4px",
+                  marginTop: "2px",
                 }}
               >
                 {formData.desiredRole || "Back-end Developer | Python Developer"}
@@ -93,8 +92,8 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                   gap: "6px",
                   fontSize: "11.5px",
                   color: "#3e3e3e",
-                  lineHeight: "16px",
-                  marginTop: "6px",
+                  lineHeight: "10px",
+                  marginTop: "2px",
                 }}
               >
                 {formData.phone && <span>{formData.phone}</span>}
@@ -111,19 +110,18 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
 
             {/* === SKILLS === */}
             {formData.skills.length > 0 && (
-              <div style={{ paddingTop: "10px" }}>
+              <div style={{ paddingTop: "2px" }}>
                 <div
                   style={{
                     borderBottom: "1px solid #000000",
-                    paddingBottom: "4px",
+                    paddingBottom: "2px",
                     marginBottom: "6px",
                   }}
                 >
                   <h2
                     style={{
                       textAlign: "center",
-                      fontWeight: 600,
-                      textTransform: "uppercase",
+                      fontWeight: 500,
                       fontSize: "12.5px",
                       letterSpacing: "0.4px",
                       color: "#000000",
@@ -136,7 +134,7 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                   style={{
                     textAlign: "center",
                     fontSize: "11px",
-                    lineHeight: "16px",
+                    lineHeight: "10px",
                     color: "#333333",
                   }}
                   dangerouslySetInnerHTML={{
@@ -146,7 +144,6 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
               </div>
             )}
 
-            {/* === EXPERIENCE === */}
             {formData.experiences.length > 0 && (
               <div style={{ paddingTop: "12px" }}>
                 <div
@@ -159,8 +156,7 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                   <h2
                     style={{
                       textAlign: "center",
-                      fontWeight: 600,
-                      textTransform: "uppercase",
+                      fontWeight: 500,
                       fontSize: "12.5px",
                       color: "#000000",
                     }}
@@ -183,7 +179,7 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                           style={{
                             fontWeight: 600,
                             fontSize: "12px",
-                            color: "#111111",
+                            color: "#555555",
                           }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(exp.company || "Company Name"),
@@ -204,7 +200,8 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                         <p
                           style={{
                             fontSize: "11px",
-                            color: "#333333",
+                            color: "#111111",
+                            fontWeight: 500
                           }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(exp.role || "Job Title"),
@@ -276,7 +273,7 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                           style={{
                             fontWeight: 600,
                             fontSize: "12px",
-                            color: "#111111",
+                            color: "#555555",
                           }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(edu.institution || "Institution Name"),
@@ -296,7 +293,7 @@ export function ResumePreview({ formData, atsData }: ResumePreviewProps) {
                         <p
                           style={{
                             fontSize: "11px",
-                            color: "#333333",
+                            color: "#111111",
                           }}
                           dangerouslySetInnerHTML={{
                             __html: highlightText(edu.degree || "Degree Name"),

@@ -2,8 +2,9 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2, MinusCircle } from "lucide-react"
 import type { ResumeFormData, Experience } from "@/app/resume/builder/page"
+import clsx from "clsx"
 
 interface Props {
   formData: ResumeFormData
@@ -29,6 +30,20 @@ export function ResumeExperienceForm({ formData, setFormData }: Props) {
       ...prev,
       experiences: prev.experiences.map((exp) =>
         exp.id === id ? { ...exp, [field]: value } : exp
+      ),
+    }))
+  }
+
+  const removeResponsibility = (id: string, index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      experiences: prev.experiences.map((exp) =>
+        exp.id === id
+          ? {
+              ...exp,
+              responsibilities: exp.responsibilities.filter((_, i) => i !== index),
+            }
+          : exp
       ),
     }))
   }
@@ -88,14 +103,14 @@ export function ResumeExperienceForm({ formData, setFormData }: Props) {
                   type="text"
                   value={exp.company}
                   onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
-                  className="w-full px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white"
+                  className="w-full px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white placeholder:text-gray-500"
                   placeholder="Empresa"
                 />
                 <input
                   type="text"
                   value={exp.role}
                   onChange={(e) => updateExperience(exp.id, "role", e.target.value)}
-                  className="w-full px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white"
+                  className="w-full px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white placeholder:text-gray-500"
                   placeholder="Cargo"
                 />
                 <div className="grid grid-cols-2 gap-2">
@@ -103,7 +118,7 @@ export function ResumeExperienceForm({ formData, setFormData }: Props) {
                     type="text"
                     value={exp.location}
                     onChange={(e) => updateExperience(exp.id, "location", e.target.value)}
-                    className="px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white"
+                    className="px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white placeholder:text-gray-500"
                     placeholder="Local"
                   />
                   <input
@@ -114,22 +129,40 @@ export function ResumeExperienceForm({ formData, setFormData }: Props) {
                       updateExperience(exp.id, "startDate", start)
                       updateExperience(exp.id, "endDate", end || "")
                     }}
-                    className="px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white"
+                    className="px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white placeholder:text-gray-500"
                     placeholder="Período (Ex: 2020 - 2023)"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  {exp.responsibilities.map((r, i) => (
-                    <input
-                      key={i}
-                      type="text"
-                      value={r}
-                      onChange={(e) => updateResponsibility(exp.id, i, e.target.value)}
-                      className="w-full px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white"
-                      placeholder="Responsabilidade ou resultado"
-                    />
-                  ))}
+                  {exp.responsibilities.map((r, i) => {
+                    const canRemove = exp.responsibilities.length > 1
+                    return (
+                      <div key={i} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={r}
+                          onChange={(e) => updateResponsibility(exp.id, i, e.target.value)}
+                          className="flex-1 px-3 py-2 bg-[#1a1a1f] border border-white/10 rounded-md text-white placeholder:text-gray-500"
+                          placeholder="Responsabilidade ou resultado"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => canRemove && removeResponsibility(exp.id, i)}
+                          disabled={!canRemove}
+                          className={clsx(
+                            "p-2 rounded-md border border-white/10 hover:text-gray-300 hover:bg-gray-500/10 transition-colors",
+                            !canRemove && "opacity-40 cursor-not-allowed"
+                          )}
+                          aria-label="Remover responsabilidade"
+                          title={canRemove ? "Remover" : "Mantenha ao menos uma responsabilidade"}
+                        >
+                          <MinusCircle className="h-4 w-4" />
+                        </button>
+                      </div>
+                    )
+                  })}
+
                   <Button
                     onClick={() => addResponsibility(exp.id)}
                     size="sm"
